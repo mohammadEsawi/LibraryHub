@@ -31,11 +31,36 @@
 				<p class="meta-label">عدد الصفحات</p>
 				<p class="meta-value">{{ $book->pages }}</p>
 			</article>
+			<article class="meta-item">
+				<p class="meta-label">السعر</p>
+				<p class="meta-value">{{ number_format((float) $book->price, 2) }}</p>
+			</article>
+			<article class="meta-item">
+				<p class="meta-label">مضاف بواسطة</p>
+				<p class="meta-value">{{ $book->listedBy?->name ?? 'إدارة المنصة' }}</p>
+			</article>
 		</div>
 
 		<div class="actions">
 			<a class="btn btn-secondary" href="{{ route('books.index') }}">رجوع</a>
-			<a class="btn btn-primary" href="{{ route('books.edit', $book) }}">تعديل</a>
+
+			@auth
+				@if (in_array(auth()->user()->role, ['customer', 'reader'], true))
+					<form action="{{ route('books.purchase', $book) }}" method="POST">
+						@csrf
+						<button class="btn btn-primary" type="submit">شراء</button>
+					</form>
+
+					<form action="{{ route('books.reading-list', $book) }}" method="POST">
+						@csrf
+						<button class="btn btn-secondary" type="submit">إضافة للقراءة</button>
+					</form>
+				@endif
+
+				@if (auth()->user()->role === 'admin')
+					<a class="btn btn-primary" href="{{ route('books.edit', $book) }}">تعديل</a>
+				@endif
+			@endauth
 		</div>
 	</section>
 @endsection

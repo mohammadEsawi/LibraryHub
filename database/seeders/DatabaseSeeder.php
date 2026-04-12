@@ -15,11 +15,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::updateOrCreate([
+            'email' => 'admin@libraryhub.test',
+        ], [
+            'name' => 'Platform Admin',
+            'role' => 'admin',
+            'password' => 'password',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::updateOrCreate([
+            'email' => 'reader@libraryhub.test',
+        ], [
+            'name' => 'Reader User',
+            'role' => 'reader',
+            'password' => 'password',
+        ]);
+
+        User::updateOrCreate([
+            'email' => 'customer@libraryhub.test',
+        ], [
+            'name' => 'Customer User',
+            'role' => 'customer',
+            'password' => 'password',
+        ]);
+
+        User::updateOrCreate([
+            'email' => 'author@libraryhub.test',
+        ], [
+            'name' => 'Author User',
+            'role' => 'author',
+            'password' => 'password',
         ]);
     }
 }

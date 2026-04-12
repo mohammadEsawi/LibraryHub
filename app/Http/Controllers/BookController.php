@@ -12,8 +12,7 @@ class BookController extends Controller
 {
     public function index()
     {
-        // with() يحمّل العلاقات بكفاءة — بدونه راح تصير N+1
-        $books = Book::with(['author', 'category'])
+        $books = Book::with(['author', 'category', 'listedBy'])
                      ->latest()
                      ->paginate(10);
 
@@ -22,7 +21,6 @@ class BookController extends Controller
 
     public function create()
     {
-        // نحتاج قوائم الكتّاب والتصنيفات للـ dropdowns
         $authors    = Author::orderBy('name')->get();
         $categories = Category::orderBy('name')->get();
 
@@ -33,6 +31,8 @@ class BookController extends Controller
     {
         $validated = $request->validated();
         $validated['available'] = $request->boolean('available');
+        $validated['published'] = true;
+        $validated['listed_by_user_id'] = $request->user()?->id;
 
         Book::create($validated);
 
@@ -43,7 +43,7 @@ class BookController extends Controller
     public function show(Book $book)
     {
         // load() يحمّل العلاقة على سجل واحد موجود
-        $book->load(['author', 'category']);
+        $book->load(['author', 'category', 'listedBy']);
 
         return view('books.show', compact('book'));
     }
@@ -60,6 +60,7 @@ class BookController extends Controller
     {
         $validated = $request->validated();
         $validated['available'] = $request->boolean('available');
+        $validated['published'] = true;
 
         $book->update($validated);
 

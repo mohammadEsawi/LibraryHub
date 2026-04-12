@@ -20,6 +20,7 @@ class UpdateBookRequest extends FormRequest
             'published_year' => 'required|integer|min:1000|max:' . date('Y'),
             'pages' => 'required|integer|min:1',
             'available' => 'boolean',
+            'price' => 'required|numeric|min:0',
         ];
     }
 }

@@ -54,6 +54,12 @@
 				@error('pages')<p class="field-error">{{ $message }}</p>@enderror
 			</div>
 
+			<div class="field">
+				<label for="price">سعر الكتاب</label>
+				<input id="price" type="number" step="0.01" min="0" name="price" value="{{ old('price', $book->price) }}" required>
+				@error('price')<p class="field-error">{{ $message }}</p>@enderror
+			</div>
+
 			<div class="field field-full">
 				<label>
 					<input type="checkbox" name="available" value="1" @checked(old('available', $book->available))>
