@@ -9,12 +9,16 @@
 <body>
 	<div class="page">
 		<header class="top-nav">
-			<a class="brand" href="{{ route('books.index') }}">Library Hub</a>
+			<a class="brand" href="{{ auth()->check() ? route('books.index') : route('login.form') }}">Library Hub</a>
 			<nav class="nav-links">
-				<a class="btn btn-secondary" href="{{ route('books.index') }}">كل الكتب</a>
+				@auth
+					<a class="btn btn-secondary" href="{{ route('books.index') }}">كل الكتب</a>
+				@endauth
 
 				@auth
 					@if (auth()->user()->role === 'admin')
+						<a class="btn btn-secondary" href="{{ route('admin.dashboard') }}">لوحة الأدمن</a>
+						<a class="btn btn-secondary" href="{{ route('admin.activity-log') }}">Activity Log</a>
 						<a class="btn btn-primary" href="{{ route('books.create') }}">إضافة كتاب</a>
 						<a class="btn btn-secondary" href="{{ route('admin.submissions.index') }}">طلبات المؤلفين</a>
 					@endif
@@ -50,6 +54,13 @@
 		@endif
 
 		@yield('content')
+
+		<footer class="site-footer">
+			<p>Library Hub Platform</p>
+			<p>نظام كامل لإدارة الكتب، القراءة، البيع، والمشتريات</p>
+		</footer>
 	</div>
+
+	@stack('scripts')
 </body>
 </html>

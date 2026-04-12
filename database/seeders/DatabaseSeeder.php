@@ -16,9 +16,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate([
-            'email' => 'admin@libraryhub.test',
+            'role' => 'admin',
         ], [
             'name' => 'Platform Admin',
+            'email' => 'mhmd@gmail.com',
+            'phone' => '0598032500',
             'role' => 'admin',
             'password' => 'password',
         ]);

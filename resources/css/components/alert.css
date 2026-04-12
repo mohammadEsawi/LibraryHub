@@ -1,9 +1,9 @@
 .alert {
-    padding: 12px 14px;
+    padding: 14px 16px;
     border-radius: 10px;
     border: 1px solid transparent;
-    margin-bottom: 16px;
-    font-size: 0.95rem;
+    margin-bottom: 20px;
+    font-size: 1rem;
 }
 
 .alert-success {

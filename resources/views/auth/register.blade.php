@@ -24,6 +24,11 @@
                 <input id="email" type="email" name="email" value="{{ old('email') }}" required>
             </div>
 
+            <div class="field field-full">
+                <label for="phone">رقم الهاتف</label>
+                <input id="phone" type="text" name="phone" value="{{ old('phone') }}" placeholder="اختياري">
+            </div>
+
             <div class="field">
                 <label for="password">كلمة المرور</label>
                 <input id="password" type="password" name="password" required>

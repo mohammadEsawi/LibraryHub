@@ -16,6 +16,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role',
     ];
@@ -51,6 +52,11 @@ class User extends Authenticatable
     public function authorSubmissions()
     {
         return $this->hasMany(AuthorSubmission::class);
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'admin_user_id');
     }
 
     public function isAdmin(): bool

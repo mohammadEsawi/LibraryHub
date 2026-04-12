@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Author;
 use App\Models\AuthorSubmission;
 use App\Models\Book;
@@ -47,6 +48,20 @@ class AdminSubmissionController extends Controller
             'admin_note' => 'تمت الموافقة وإضافة الكتاب إلى المنصة.',
         ]);
 
+        ActivityLog::create([
+            'admin_user_id' => $request->user()->id,
+            'action' => 'approve_submission',
+            'entity_type' => AuthorSubmission::class,
+            'entity_id' => $submission->id,
+            'title' => 'موافقة على طلب مؤلف',
+            'description' => 'تمت الموافقة على طلب المؤلف وإضافة الكتاب إلى المنصة.',
+            'meta' => [
+                'submission_title' => $submission->title,
+                'book_id' => $book->id,
+                'author_name' => $author->name,
+            ],
+        ]);
+
         return back()->with('success', 'تمت الموافقة على الطلب وإضافة الكتاب.');
     }
 
@@ -63,6 +78,19 @@ class AdminSubmissionController extends Controller
         $submission->update([
             'status' => 'rejected',
             'admin_note' => $validated['admin_note'],
+        ]);
+
+        ActivityLog::create([
+            'admin_user_id' => $request->user()->id,
+            'action' => 'reject_submission',
+            'entity_type' => AuthorSubmission::class,
+            'entity_id' => $submission->id,
+            'title' => 'رفض طلب مؤلف',
+            'description' => 'تم رفض طلب المؤلف مع حفظ الملاحظة.',
+            'meta' => [
+                'submission_title' => $submission->title,
+                'admin_note' => $validated['admin_note'],
+            ],
         ]);
 
         return back()->with('success', 'تم رفض الطلب مع حفظ الملاحظة.');

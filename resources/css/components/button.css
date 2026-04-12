@@ -2,11 +2,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     border-radius: 10px;
     border: 1px solid transparent;
-    padding: 9px 14px;
+    padding: 12px 18px;
     font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
     transition: 0.2s ease;
 }
@@ -42,6 +43,6 @@
 
 .actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
 }

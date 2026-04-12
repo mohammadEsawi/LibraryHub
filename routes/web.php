@@ -7,9 +7,11 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReadingListController;
 use App\Http\Controllers\AuthorSubmissionController;
 use App\Http\Controllers\AdminSubmissionController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminActivityLogController;
 
 Route::get('/', function () {
-	return redirect()->route('books.index');
+	return redirect()->route('login.form');
 });
 
 Route::middleware('guest')->group(function () {
@@ -23,9 +25,14 @@ Route::post('/logout', [AuthController::class, 'logout'])
 	->middleware('auth')
 	->name('logout');
 
-Route::resource('books', BookController::class)->only(['index', 'show']);
+Route::middleware('auth')->group(function () {
+	Route::resource('books', BookController::class)->only(['index', 'show']);
+});
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+	Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+	Route::get('/admin/activity-log', [AdminActivityLogController::class, 'index'])->name('admin.activity-log');
+
 	Route::resource('books', BookController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
 
 	Route::get('/admin/submissions', [AdminSubmissionController::class, 'index'])->name('admin.submissions.index');

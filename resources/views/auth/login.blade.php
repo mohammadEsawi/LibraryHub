@@ -3,11 +3,11 @@
 @section('title', 'تسجيل الدخول')
 
 @section('content')
-    <section class="card" style="max-width: 560px; margin-inline: auto;">
+    <section class="card auth-login-card">
         <div class="card-header">
             <div>
                 <h1 class="card-title">تسجيل الدخول</h1>
-                <p class="page-subtitle">ادخل بريدك وكلمة المرور.</p>
+                <p class="page-subtitle">ادخل بريدك وكلمة المرور للوصول إلى المنصة.</p>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
             </div>
 
             <div class="actions field-full">
-                <button class="btn btn-primary" type="submit">دخول</button>
+                <button class="btn btn-primary" type="submit">دخول للمنصة</button>
                 <a class="btn btn-secondary" href="{{ route('register.form') }}">إنشاء حساب</a>
             </div>
         </form>

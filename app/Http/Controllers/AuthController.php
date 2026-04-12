@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    private function routeForRole(string $role): string
+    {
+        return $role === 'admin' ? 'admin.dashboard' : 'books.index';
+    }
+
     public function showRegister()
     {
         return view('auth.register');
@@ -18,6 +23,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
+            'phone' => 'nullable|string|max:30|unique:users,phone',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|in:customer,reader,author',
         ]);
@@ -26,7 +32,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('books.index')->with('success', 'تم إنشاء الحساب وتسجيل الدخول بنجاح.');
+        return redirect()->route($this->routeForRole($user->role))->with('success', 'تم إنشاء الحساب وتسجيل الدخول بنجاح.');
     }
 
     public function showLogin()
@@ -49,7 +55,9 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('books.index'));
+        $user = $request->user();
+
+        return redirect()->intended(route($this->routeForRole($user->role)));
     }
 
     public function logout(Request $request)
