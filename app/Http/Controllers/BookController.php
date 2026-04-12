@@ -7,7 +7,6 @@ use App\Models\Author;
 use App\Models\Category;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
-use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -32,7 +31,8 @@ class BookController extends Controller
 
     public function store(StoreBookRequest $request)
     {
-        $validated['available'] = $request->has('available');
+        $validated = $request->validated();
+        $validated['available'] = $request->boolean('available');
 
         Book::create($validated);
 
@@ -58,7 +58,8 @@ class BookController extends Controller
 
     public function update(UpdateBookRequest $request, Book $book)
     {
-        $validated['available'] = $request->has('available');
+        $validated = $request->validated();
+        $validated['available'] = $request->boolean('available');
 
         $book->update($validated);
 

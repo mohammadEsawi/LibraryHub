@@ -1,0 +1,70 @@
+@extends('layouts.app')
+
+@section('title', 'تعديل كتاب')
+
+@section('content')
+	<section class="card">
+		<div class="card-header">
+			<div>
+				<h1 class="card-title">تعديل كتاب</h1>
+				<p class="page-subtitle">قم بتحديث المعلومات المطلوبة.</p>
+			</div>
+			<a class="btn btn-secondary" href="{{ route('books.index') }}">رجوع</a>
+		</div>
+
+		<form class="form-grid" action="{{ route('books.update', $book) }}" method="POST">
+			@csrf
+			@method('PUT')
+
+			<div class="field field-full">
+				<label for="title">العنوان</label>
+				<input id="title" type="text" name="title" value="{{ old('title', $book->title) }}" required>
+				@error('title')<p class="field-error">{{ $message }}</p>@enderror
+			</div>
+
+			<div class="field">
+				<label for="author_id">المؤلف</label>
+				<select id="author_id" name="author_id" required>
+					@foreach($authors as $author)
+						<option value="{{ $author->id }}" @selected(old('author_id', $book->author_id) == $author->id)>{{ $author->name }}</option>
+					@endforeach
+				</select>
+				@error('author_id')<p class="field-error">{{ $message }}</p>@enderror
+			</div>
+
+			<div class="field">
+				<label for="category_id">التصنيف</label>
+				<select id="category_id" name="category_id" required>
+					@foreach($categories as $category)
+						<option value="{{ $category->id }}" @selected(old('category_id', $book->category_id) == $category->id)>{{ $category->name }}</option>
+					@endforeach
+				</select>
+				@error('category_id')<p class="field-error">{{ $message }}</p>@enderror
+			</div>
+
+			<div class="field">
+				<label for="published_year">سنة النشر</label>
+				<input id="published_year" type="number" name="published_year" value="{{ old('published_year', $book->published_year) }}" min="1000" max="{{ date('Y') }}" required>
+				@error('published_year')<p class="field-error">{{ $message }}</p>@enderror
+			</div>
+
+			<div class="field">
+				<label for="pages">عدد الصفحات</label>
+				<input id="pages" type="number" name="pages" value="{{ old('pages', $book->pages) }}" min="1" required>
+				@error('pages')<p class="field-error">{{ $message }}</p>@enderror
+			</div>
+
+			<div class="field field-full">
+				<label>
+					<input type="checkbox" name="available" value="1" @checked(old('available', $book->available))>
+					متاح للاستعارة
+				</label>
+			</div>
+
+			<div class="actions field-full">
+				<button class="btn btn-primary" type="submit">تحديث</button>
+				<a class="btn btn-secondary" href="{{ route('books.index') }}">إلغاء</a>
+			</div>
+		</form>
+	</section>
+@endsection

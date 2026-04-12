@@ -1,0 +1,17 @@
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.badge-available {
+    background: #e5f6ea;
+    color: #1f6b3a;
+}
+
+.badge-unavailable {
+    background: #fde8e8;
+    color: #8f2e2e;
+}

@@ -1,0 +1,19 @@
+.alert {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+}
+
+.alert-success {
+    background: var(--success-bg);
+    color: var(--success-text);
+    border-color: #c7e7d3;
+}
+
+.alert-error {
+    background: var(--danger-bg);
+    color: var(--danger-text);
+    border-color: #f0c7c7;
+}
