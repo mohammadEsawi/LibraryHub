@@ -11,7 +11,7 @@
 				<p class="page-subtitle">استكشف واشتري الكتب من مكتبتنا الواسعة، أو اقرأ مجاناً.</p>
 			</div>
 			@auth
-				@if (auth()->user()->role === 'admin')
+				@if (in_array(auth()->user()->role, ['admin', 'author'], true))
 					<a class="btn btn-primary" href="{{ route('books.create') }}">+ كتاب جديد</a>
 				@endif
 			@endauth
@@ -36,20 +36,15 @@
 	<div class="books-grid">
 		@forelse($books as $book)
 			<article class="book-card">
-				<div class="book-card-image">
-					<div class="book-card-placeholder">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3.042.525A9.006 9.006 0 002.25 9m12-7.5h3.75m-3.75 0a9 9 0 013.042.525A9.006 9.006 0 0121.75 9M6 12a6 6 0 11-12 0 6 6 0 0112 0zm12 6a4 4 0 11-8 0 4 4 0 018 0z" />
-						</svg>
-					</div>
-					@if ($book->price > 0)
-						<span class="book-card-badge book-card-badge-premium">بريميوم</span>
-					@else
-						<span class="book-card-badge book-card-badge-free">مجاني</span>
-					@endif
-				</div>
-
 				<div class="book-card-body">
+					<div class="book-card-top">
+						@if ($book->price > 0)
+							<span class="book-card-badge book-card-badge-premium">بريميوم</span>
+						@else
+							<span class="book-card-badge book-card-badge-free">مجاني</span>
+						@endif
+					</div>
+
 					<h3 class="book-card-title">{{ $book->title }}</h3>
 					<p class="book-card-author">{{ $book->author?->name ?? 'غير معروف' }}</p>
 					<p class="book-card-category">{{ $book->category?->name ?? '-' }}</p>

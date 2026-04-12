@@ -7,9 +7,33 @@
         <div class="card-header">
             <div>
                 <h1 class="card-title">طلبات بيع الكتب</h1>
-                <p class="page-subtitle">متابعة حالة الطلبات الخاصة بك.</p>
+                <p class="page-subtitle">متابعة حالة الطلبات الخاصة بك ورصيد أرباحك من مبيعات المتجر.</p>
             </div>
-            <a class="btn btn-primary" href="{{ route('author-submissions.create') }}">طلب جديد</a>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a class="btn btn-secondary" href="{{ route('books.create') }}">إضافة كتاب للبيع</a>
+                <a class="btn btn-primary" href="{{ route('author-submissions.create') }}">طلب جديد</a>
+            </div>
+        </div>
+
+        <div class="table-wrap" style="margin-bottom: 18px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>رصيد الحساب</th>
+                        <th>إجمالي المبيعات</th>
+                        <th>كتب تم بيعها</th>
+                        <th>الكتب المعروضة للبيع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>₪{{ number_format($totalEarnings, 2) }}</strong></td>
+                        <td>{{ $totalSales }}</td>
+                        <td>{{ $soldBooksCount }}</td>
+                        <td>{{ $listedBooksCount }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="table-wrap">

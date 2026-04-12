@@ -26,15 +26,21 @@ Route::post('/logout', [AuthController::class, 'logout'])
 	->middleware('auth')
 	->name('logout');
 
+Route::middleware(['auth', 'role:admin,author'])->group(function () {
+	Route::resource('books', BookController::class)->only(['create', 'store']);
+});
+
 Route::middleware('auth')->group(function () {
-	Route::resource('books', BookController::class)->only(['index', 'show']);
+	Route::resource('books', BookController::class)
+		->only(['index', 'show'])
+		->whereNumber('book');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
 	Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 	Route::get('/admin/activity-log', [AdminActivityLogController::class, 'index'])->name('admin.activity-log');
 
-	Route::resource('books', BookController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
+	Route::resource('books', BookController::class)->only(['edit', 'update', 'destroy']);
 
 	Route::get('/admin/submissions', [AdminSubmissionController::class, 'index'])->name('admin.submissions.index');
 	Route::post('/admin/submissions/{submission}/approve', [AdminSubmissionController::class, 'approve'])->name('admin.submissions.approve');

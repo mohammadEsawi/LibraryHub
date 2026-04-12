@@ -3,19 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuthorSubmission;
+use App\Models\Book;
 use App\Models\Category;
+use App\Models\Purchase;
 use Illuminate\Http\Request;
 
 class AuthorSubmissionController extends Controller
 {
     public function index(Request $request)
     {
+        $userId = $request->user()->id;
+
         $submissions = AuthorSubmission::with('category')
-            ->where('user_id', $request->user()->id)
+            ->where('user_id', $userId)
             ->latest()
             ->paginate(10);
 
-        return view('author-submissions.index', compact('submissions'));
+        $listedBooksCount = Book::where('listed_by_user_id', $userId)->count();
+
+        $salesBaseQuery = Purchase::query()
+            ->join('books', 'books.id', '=', 'purchases.book_id')
+            ->where('books.listed_by_user_id', $userId);
+
+        $totalEarnings = (float) (clone $salesBaseQuery)->sum('purchases.price_paid');
+        $totalSales = (clone $salesBaseQuery)->count('purchases.id');
+        $soldBooksCount = (clone $salesBaseQuery)->distinct()->count('purchases.book_id');
+
+        return view('author-submissions.index', compact(
+            'submissions',
+            'listedBooksCount',
+            'totalEarnings',
+            'totalSales',
+            'soldBooksCount'
+        ));
     }
 
     public function create()
