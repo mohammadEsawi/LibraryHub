@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Author;
 use App\Models\Category;
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -28,17 +30,8 @@ class BookController extends Controller
         return view('books.create', compact('authors', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        $validated = $request->validate([
-            'title'          => 'required|string|max:255',
-            'author_id'      => 'required|exists:authors,id',
-            'category_id'    => 'required|exists:categories,id',
-            'published_year' => 'required|integer|min:1000|max:' . date('Y'),
-            'pages'          => 'required|integer|min:1',
-            'available'      => 'boolean',
-        ]);
-
         $validated['available'] = $request->has('available');
 
         Book::create($validated);
@@ -63,17 +56,8 @@ class BookController extends Controller
         return view('books.edit', compact('book', 'authors', 'categories'));
     }
 
-    public function update(Request $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-        $validated = $request->validate([
-            'title'          => 'required|string|max:255',
-            'author_id'      => 'required|exists:authors,id',
-            'category_id'    => 'required|exists:categories,id',
-            'published_year' => 'required|integer|min:1000|max:' . date('Y'),
-            'pages'          => 'required|integer|min:1',
-            'available'      => 'boolean',
-        ]);
-
         $validated['available'] = $request->has('available');
 
         $book->update($validated);
