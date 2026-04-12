@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ReadingListController;
 use App\Http\Controllers\AuthorSubmissionController;
 use App\Http\Controllers\AdminSubmissionController;
@@ -41,7 +42,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:customer,reader'])->group(function () {
-	Route::post('/books/{book}/purchase', [PurchaseController::class, 'store'])->name('books.purchase');
+	Route::get('/checkout/{book}', [CheckoutController::class, 'show'])->name('checkout.show');
+	Route::post('/checkout/{book}/process', [CheckoutController::class, 'process'])->name('checkout.process');
 	Route::post('/books/{book}/reading-list', [ReadingListController::class, 'store'])->name('books.reading-list');
 });
 

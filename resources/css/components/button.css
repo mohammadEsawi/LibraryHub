@@ -41,8 +41,21 @@
     background: #f3d5d5;
 }
 
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
 .actions {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+.book-card-actions form {
+    margin: 0;
+}
+
+.book-card-actions form button {
+    width: 100%;
 }

@@ -13,11 +13,21 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::with(['author', 'category', 'listedBy'])
-                     ->latest()
-                     ->paginate(10);
+        $type = request()->string('type', 'all')->toString();
+        
+        $query = Book::with(['author', 'category', 'listedBy'])
+                     ->where('available', true)
+                     ->latest();
+        
+        if ($type === 'premium') {
+            $query->where('price', '>', 0);
+        } elseif ($type === 'free') {
+            $query->where('price', 0);
+        }
+        
+        $books = $query->paginate(12);
 
-        return view('books.index', compact('books'));
+        return view('books.index', compact('books', 'type'));
     }
 
     public function create()
