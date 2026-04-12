@@ -41,9 +41,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 	Route::post('/admin/submissions/{submission}/reject', [AdminSubmissionController::class, 'reject'])->name('admin.submissions.reject');
 });
 
-Route::middleware(['auth', 'role:customer,reader'])->group(function () {
+Route::middleware('auth')->group(function () {
 	Route::get('/checkout/{book}', [CheckoutController::class, 'show'])->name('checkout.show');
 	Route::post('/checkout/{book}/process', [CheckoutController::class, 'process'])->name('checkout.process');
+});
+
+Route::middleware(['auth', 'role:customer,reader'])->group(function () {
 	Route::post('/books/{book}/reading-list', [ReadingListController::class, 'store'])->name('books.reading-list');
 });
 

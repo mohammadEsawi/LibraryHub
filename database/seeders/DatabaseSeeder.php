@@ -15,9 +15,6 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         // Create Admin User
@@ -83,26 +80,36 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Create purchases for customer
-        foreach (range(1, 8) as $i) {
-            $book = collect($books)->random();
-            if ($book->price > 0) {
-                Purchase::create([
-                    'user_id' => $customer->id,
-                    'book_id' => $book->id,
+        // Create purchases for customer without duplicates
+        $premiumBookIds = collect($books)
+            ->filter(fn ($book) => (float) $book->price > 0)
+            ->pluck('id')
+            ->shuffle()
+            ->take(8);
+
+        foreach ($premiumBookIds as $bookId) {
+            $book = collect($books)->firstWhere('id', $bookId);
+            if (!$book) {
+                continue;
+            }
+
+            Purchase::firstOrCreate(
+                ['user_id' => $customer->id, 'book_id' => $book->id],
+                [
                     'price_paid' => $book->price,
                     'purchased_at' => now()->subDays(rand(0, 30)),
-                ]);
-            }
+                ]
+            );
         }
 
-        // Create reading list entries
-        foreach (range(1, 12) as $i) {
-            ReadingList::create([
-                'user_id' => $reader->id,
-                'book_id' => collect($books)->random()->id,
-                'created_at' => now()->subDays(rand(0, 45)),
-            ]);
+        // Create reading list entries without duplicates
+        $readingBookIds = collect($books)->pluck('id')->shuffle()->take(12);
+
+        foreach ($readingBookIds as $bookId) {
+            ReadingList::firstOrCreate(
+                ['user_id' => $reader->id, 'book_id' => $bookId],
+                ['created_at' => now()->subDays(rand(0, 45))]
+            );
         }
 
         // Create additional test users with mixed roles

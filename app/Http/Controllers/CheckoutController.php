@@ -10,6 +10,11 @@ class CheckoutController extends Controller
 {
     public function show(Request $request, Book $book)
     {
+        // التحقق من الدور
+        if (!in_array($request->user()->role ?? null, ['customer', 'reader'], true)) {
+            return redirect()->route('books.show', $book)->with('error', 'ليس لديك صلاحية الشراء.');
+        }
+
         if (!$book->available) {
             return redirect()->route('books.show', $book)->with('error', 'هذا الكتاب غير متاح حالياً.');
         }

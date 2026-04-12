@@ -87,10 +87,7 @@
 							@auth
 								@if (in_array(auth()->user()->role, ['customer', 'reader'], true))
 									@if ($book->price > 0)
-										<form action="{{ route('books.purchase', $book) }}" method="POST">
-											@csrf
-											<button class="btn btn-primary btn-sm" type="submit">شراء</button>
-										</form>
+										<a class="btn btn-primary btn-sm" href="{{ route('checkout.show', $book) }}">شراء</a>
 									@else
 										<form action="{{ route('books.reading-list', $book) }}" method="POST">
 											@csrf
