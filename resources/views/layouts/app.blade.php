@@ -28,9 +28,13 @@
 						<a class="btn btn-secondary" href="{{ route('author-submissions.index') }}">طلباتي</a>
 					@endif
 
-					<form action="{{ route('logout') }}" method="POST">
+					@if (in_array(auth()->user()->role, ['reader', 'customer'], true))
+						<a class="btn btn-secondary" href="{{ route('reading-list.index') }}">قائمة القراءة</a>
+					@endif
+
+					<form class="nav-logout-form" action="{{ route('logout') }}" method="POST">
 						@csrf
-						<button class="btn btn-danger" type="submit">تسجيل خروج</button>
+						<button class="btn btn-danger btn-sm" type="submit">تسجيل خروج</button>
 					</form>
 				@else
 					<a class="btn btn-secondary" href="{{ route('login.form') }}">تسجيل دخول</a>

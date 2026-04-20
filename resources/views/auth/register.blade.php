@@ -3,7 +3,7 @@
 @section('title', 'إنشاء حساب')
 
 @section('content')
-    <section class="card" style="max-width: 560px; margin-inline: auto;">
+    <section class="card card-centered card-auth-register">
         <div class="card-header">
             <div>
                 <h1 class="card-title">إنشاء حساب جديد</h1>

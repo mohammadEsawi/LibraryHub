@@ -43,6 +43,7 @@
                 <span class="summary-pill">الفترة: {{ $rangeLabel }}</span>
                 <span class="summary-pill">الكتب: {{ $stats['books_total'] }}</span>
                 <span class="summary-pill">الإيراد: {{ number_format($stats['revenue_total'], 2) }}</span>
+                <span class="summary-pill">متاح: {{ $inventory['available'] }}</span>
             </div>
         </div>
 
@@ -114,6 +115,111 @@
                 </tbody>
             </table>
         </div>
+    </section>
+
+    <section class="card stack dashboard-panel">
+        <div class="card-header">
+            <div>
+                <p class="panel-kicker">Inventory</p>
+                <h2 class="card-title">Book Inventory Count</h2>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>المؤشر</th>
+                        <th>القيمة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>إجمالي الكتب</td>
+                        <td>{{ $inventory['total'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>كتب متاحة</td>
+                        <td>{{ $inventory['available'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>كتب غير متاحة</td>
+                        <td>{{ $inventory['unavailable'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>كتب مدفوعة</td>
+                        <td>{{ $inventory['premium'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>كتب مجانية</td>
+                        <td>{{ $inventory['free'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="dashboard-charts-grid">
+        <article class="card stack dashboard-panel">
+            <div class="card-header">
+                <div>
+                    <p class="panel-kicker">Sales</p>
+                    <h2 class="card-title">Top-Selling Books</h2>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الكتاب</th>
+                            <th>عدد المبيعات</th>
+                            <th>الإيراد</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($topSellingBooks as $item)
+                            <tr>
+                                <td>{{ $item->title }}</td>
+                                <td>{{ $item->sales_count }}</td>
+                                <td>{{ number_format((float) $item->revenue_total, 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="3">لا توجد مبيعات خلال الفترة المختارة.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+        <article class="card stack dashboard-panel">
+            <div class="card-header">
+                <div>
+                    <p class="panel-kicker">Reports</p>
+                    <h2 class="card-title">Revenue by Book Report</h2>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الكتاب</th>
+                            <th>عدد المبيعات</th>
+                            <th>الإيراد الكلي</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($revenueByBook as $item)
+                            <tr>
+                                <td>{{ $item->title }}</td>
+                                <td>{{ $item->sales_count }}</td>
+                                <td>{{ number_format((float) $item->revenue_total, 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="3">لا توجد بيانات إيراد للكتب في هذه الفترة.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </article>
     </section>
 
     <section class="dashboard-charts-grid">

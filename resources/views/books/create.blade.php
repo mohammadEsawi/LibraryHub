@@ -12,7 +12,7 @@
 			<a class="btn btn-secondary" href="{{ route('books.index') }}">رجوع</a>
 		</div>
 
-		<form class="form-grid" action="{{ route('books.store') }}" method="POST">
+		<form class="form-grid" action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
 			@csrf
 
 			<div class="field field-full">
@@ -22,14 +22,9 @@
 			</div>
 
 			<div class="field">
-				<label for="author_id">المؤلف</label>
-				<select id="author_id" name="author_id" required>
-					<option value="">اختر مؤلف</option>
-					@foreach($authors as $author)
-						<option value="{{ $author->id }}" @selected(old('author_id') == $author->id)>{{ $author->name }}</option>
-					@endforeach
-				</select>
-				@error('author_id')<p class="field-error">{{ $message }}</p>@enderror
+				<label for="author_name">اسم المؤلف</label>
+				<input id="author_name" type="text" name="author_name" value="{{ old('author_name') }}" placeholder="اكتب اسم المؤلف" required>
+				@error('author_name')<p class="field-error">{{ $message }}</p>@enderror
 			</div>
 
 			<div class="field">
@@ -59,6 +54,12 @@
 				<label for="price">سعر الكتاب</label>
 				<input id="price" type="number" step="0.01" min="0" name="price" value="{{ old('price', 0) }}" required>
 				@error('price')<p class="field-error">{{ $message }}</p>@enderror
+			</div>
+
+			<div class="field field-full">
+				<label for="cover_image">صورة الكتاب (اختياري)</label>
+				<input id="cover_image" type="file" name="cover_image" accept="image/*">
+				@error('cover_image')<p class="field-error">{{ $message }}</p>@enderror
 			</div>
 
 			<div class="field field-full">

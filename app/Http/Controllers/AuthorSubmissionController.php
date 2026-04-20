@@ -29,12 +29,19 @@ class AuthorSubmissionController extends Controller
         $totalSales = (clone $salesBaseQuery)->count('purchases.id');
         $soldBooksCount = (clone $salesBaseQuery)->distinct()->count('purchases.book_id');
 
+        $listedBooks = Book::with(['author', 'category'])
+            ->where('listed_by_user_id', $userId)
+            ->latest()
+            ->take(8)
+            ->get();
+
         return view('author-submissions.index', compact(
             'submissions',
             'listedBooksCount',
             'totalEarnings',
             'totalSales',
-            'soldBooksCount'
+            'soldBooksCount',
+            'listedBooks'
         ));
     }
 

@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
@@ -58,6 +59,9 @@ class AdminDashboardController extends Controller
             'authors_total' => User::where('role', 'author')->count(),
             'books_total' => Book::count(),
             'available_books' => Book::where('available', true)->count(),
+            'unavailable_books' => Book::where('available', false)->count(),
+            'premium_books' => Book::where('price', '>', 0)->count(),
+            'free_books' => Book::where('price', 0)->count(),
             'pending_submissions' => AuthorSubmission::where('status', 'pending')->count(),
             'approved_submissions' => AuthorSubmission::where('status', 'approved')->count(),
             'purchases_total' => $purchasesQuery->count(),
@@ -67,6 +71,29 @@ class AdminDashboardController extends Controller
             'activity_logs_total' => $activityLogsQuery->count(),
         ];
 
+        $inventory = [
+            'total' => $stats['books_total'],
+            'available' => $stats['available_books'],
+            'unavailable' => $stats['unavailable_books'],
+            'premium' => $stats['premium_books'],
+            'free' => $stats['free_books'],
+        ];
+
+        $revenueByBook = Purchase::query()
+            ->join('books', 'books.id', '=', 'purchases.book_id')
+            ->whereBetween('purchases.created_at', [$startDate, $endDate])
+            ->groupBy('books.id', 'books.title')
+            ->select(
+                'books.id',
+                'books.title',
+                DB::raw('COUNT(purchases.id) as sales_count'),
+                DB::raw('SUM(purchases.price_paid) as revenue_total')
+            )
+            ->orderByDesc('revenue_total')
+            ->get();
+
+        $topSellingBooks = $revenueByBook->take(5);
+
         $latestUsers = User::latest()->take(6)->get();
         $latestPurchases = Purchase::with(['user', 'book'])->latest('purchased_at')->take(8)->get();
         $latestSubmissions = AuthorSubmission::with(['user', 'category'])->latest()->take(8)->get();
@@ -75,12 +102,15 @@ class AdminDashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'stats',
+            'inventory',
             'range',
             'rangeLabel',
             'labels',
             'revenueSeries',
             'purchasesSeries',
             'submissionsSeries',
+            'revenueByBook',
+            'topSellingBooks',
             'latestUsers',
             'latestPurchases',
             'latestSubmissions',

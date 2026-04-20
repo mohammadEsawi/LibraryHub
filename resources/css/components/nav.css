@@ -3,17 +3,53 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: rgba(255, 253, 249, 0.92);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-soft);
 }
 
 .brand {
-    font-size: 1.45rem;
+    font-size: 1.35rem;
     font-weight: 800;
     color: var(--accent);
+    letter-spacing: 0.01em;
 }
 
 .nav-links {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
+}
+
+.nav-logout-form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.nav-logout-form .btn {
+    white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+    .top-nav {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .nav-links {
+        width: 100%;
+    }
+
+    .nav-logout-form {
+        width: 100%;
+    }
+
+    .nav-logout-form .btn {
+        width: 100%;
+    }
 }

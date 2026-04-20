@@ -5,9 +5,12 @@
 @section('content')
 	<section class="book-detail card">
 		<div class="book-detail-header">
-			<div class="book-detail-image" style="background: linear-gradient(135deg, #e8d0b6 0%, #f9f0e1 100%); display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 20px;">
-				<p style="font-size: 1.2rem; color: #9b3d2a; font-weight: 600; margin: 0;">📸</p>
-				<p style="font-size: 1rem; color: #5d3f2a; font-weight: 600; margin: 10px 0 0 0;">سيتم توفر الصورة قريباً</p>
+			<div class="book-detail-image">
+				@if ($book->cover_image)
+					<img src="{{ asset('storage/' . $book->cover_image) }}" alt="غلاف {{ $book->title }}" class="book-detail-cover">
+				@else
+					<div class="book-detail-placeholder">لا توجد صورة لهذا الكتاب</div>
+				@endif
 			</div>
 
 			<div class="book-detail-info">
@@ -108,11 +111,13 @@
 
 	@auth
 		@if (in_array(auth()->user()->role, ['customer', 'reader'], true))
-			<section class="card" style="margin-top: 28px;">
-				<h2 style="margin-top: 0;">كتب مشابهة</h2>
+			<section class="card section-gap">
+				<h2>كتب مشابهة</h2>
 				<div class="books-grid">
 					<!-- هنا يمكن إضافة كتب مشابهة -->
-					<p style="grid-column: 1 / -1; color: var(--muted);">كتب مشابهة قريباً...</p>
+					<div class="empty-state">
+						<p class="empty-state-text">كتب مشابهة قريباً...</p>
+					</div>
 				</div>
 			</section>
 		@endif

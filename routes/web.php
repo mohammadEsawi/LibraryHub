@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:customer,reader'])->group(function () {
+	Route::get('/reading-list', [ReadingListController::class, 'index'])->name('reading-list.index');
 	Route::post('/books/{book}/reading-list', [ReadingListController::class, 'store'])->name('books.reading-list');
 });
 

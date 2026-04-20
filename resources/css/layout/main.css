@@ -1,7 +1,184 @@
 .page {
-    max-width: 1260px;
+    max-width: 1220px;
+    margin: 28px auto;
+    padding: 0 20px;
+}
+
+.section-gap {
+    margin-top: 24px;
+}
+
+.card-centered {
+    margin-inline: auto;
+}
+
+.card-auth-register {
+    max-width: 560px;
+}
+
+.card-welcome {
+    max-width: 760px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.actions-center {
+    justify-content: center;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 32px;
+    border: 1px dashed #dbc9b3;
+    border-radius: 12px;
+    background: #fff9f1;
+}
+
+.empty-state-text {
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+.pagination-spaced {
+    margin-top: 32px;
+}
+
+.page-subtitle-tight {
+    margin-top: 6px;
+}
+
+.checkout-card {
+    max-width: 640px;
     margin: 34px auto;
-    padding: 0 22px;
+}
+
+.checkout-head {
+    margin-bottom: 24px;
+}
+
+.checkout-title {
+    margin: 0 0 8px;
+    font-size: 1.7rem;
+}
+
+.checkout-book {
+    padding: 18px;
+    background: #f9f0e1;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e8d0b6;
+}
+
+.checkout-book-content {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.checkout-book-cover {
+    width: 80px;
+    min-width: 80px;
+    height: 120px;
+    background: linear-gradient(135deg, #9b3d2a 0%, #d8a15b 50%, #f9f0e1 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d8a15b;
+    color: #5d3f2a;
+}
+
+.checkout-book-meta {
+    flex: 1;
+}
+
+.checkout-book-label {
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.checkout-book-title {
+    margin: 0 0 8px;
+    font-size: 1.18rem;
+    color: #4e3f2e;
+}
+
+.checkout-book-line {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    color: #4e3f2e;
+}
+
+.checkout-book-line-accent {
+    color: #9b3d2a;
+}
+
+.checkout-summary {
+    padding: 20px;
+    background: #fff;
+    border: 2px solid #d8a15b;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.checkout-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #e8d0b6;
+}
+
+.checkout-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.checkout-label {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.checkout-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #4e3f2e;
+}
+
+.checkout-total-label {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #9b3d2a;
+}
+
+.checkout-total-value {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #d8a15b;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.checkout-note {
+    margin-top: 20px;
+    padding: 12px;
+    background: #e8f5e9;
+    border-radius: 8px;
+    border-right: 4px solid #4caf50;
+}
+
+.checkout-note p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #2e7d32;
 }
 
 .page-head {
@@ -11,7 +188,7 @@
 .page-subtitle {
     color: var(--muted);
     margin-top: 8px;
-    font-size: 1.05rem;
+    font-size: 1rem;
 }
 
 .stack {
@@ -48,10 +225,10 @@
 }
 
 .site-footer {
-    margin-top: 26px;
-    padding: 18px;
+    margin-top: 30px;
+    padding: 16px 18px;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: var(--radius);
     background: var(--surface-2);
     display: flex;
     justify-content: space-between;
@@ -59,7 +236,8 @@
     gap: 10px;
     flex-wrap: wrap;
     color: var(--muted);
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+    box-shadow: var(--shadow-soft);
 }
 
 .auth-login-card {
@@ -202,8 +380,9 @@
     flex-wrap: wrap;
     padding: 14px;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: var(--radius);
     background: #fffaf0;
+    box-shadow: var(--shadow-soft);
 }
 
 .dashboard-range-note {
@@ -297,6 +476,34 @@
 }
 
 @media (max-width: 760px) {
+    .page {
+        margin: 18px auto;
+        padding: 0 14px;
+    }
+
+    .card-welcome {
+        margin: 24px auto;
+    }
+
+    .empty-state {
+        padding: 24px 16px;
+    }
+
+    .checkout-card {
+        margin: 18px auto;
+    }
+
+    .checkout-book-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .checkout-book-cover {
+        width: 64px;
+        min-width: 64px;
+        height: 96px;
+    }
+
     .meta-grid {
         grid-template-columns: 1fr;
     }

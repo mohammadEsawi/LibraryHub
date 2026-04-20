@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class ReadingListController extends Controller
 {
+    public function index(Request $request)
+    {
+        $entries = ReadingList::with(['book.author', 'book.category'])
+            ->where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate(12);
+
+        return view('reading-list.index', compact('entries'));
+    }
+
     public function store(Request $request, Book $book)
     {
         $entry = ReadingList::firstOrCreate(

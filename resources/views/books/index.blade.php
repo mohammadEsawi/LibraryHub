@@ -3,6 +3,8 @@
 @section('title', 'قائمة الكتب')
 
 @section('content')
+	@php($defaultBookImage = asset('images/book.jpg'))
+
 	<section class="books-header card">
 		<div class="card-header">
 			<div>
@@ -18,6 +20,11 @@
 		</div>
 
 		<form class="books-filter" method="GET" action="{{ route('books.index') }}">
+			<div class="field">
+				<label for="q">بحث</label>
+				<input id="q" name="q" type="text" value="{{ $q ?? '' }}" placeholder="ابحث بعنوان الكتاب أو اسم المؤلف أو التصنيف">
+			</div>
+
 			<div class="field">
 				<label for="type">نوع الكتاب</label>
 				<select id="type" name="type">
@@ -36,6 +43,14 @@
 	<div class="books-grid">
 		@forelse($books as $book)
 			<article class="book-card">
+				<div class="book-card-image">
+					<img
+						src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : $defaultBookImage }}"
+						alt="غلاف {{ $book->title }}"
+						class="book-card-cover"
+					>
+				</div>
+
 				<div class="book-card-body">
 					<div class="book-card-top">
 						@if ($book->price > 0)
@@ -110,13 +125,13 @@
 				</div>
 			</article>
 		@empty
-			<div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
-				<p style="font-size: 1.1rem; color: var(--muted);">لا توجد كتب متاحة حالياً.</p>
+			<div class="empty-state">
+				<p class="empty-state-text">لا توجد كتب متاحة حالياً.</p>
 			</div>
 		@endforelse
 	</div>
 
-	<div class="pagination" style="margin-top: 40px;">
+	<div class="pagination pagination-spaced">
 		{{ $books->links() }}
 	</div>
 @endsection

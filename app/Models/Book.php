@@ -18,6 +18,7 @@ class Book extends Model
         'published',
         'available',
         'price',
+        'cover_image',
         'listed_by_user_id',
     ];
 

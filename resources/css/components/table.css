@@ -1,8 +1,9 @@
 .table-wrap {
     overflow-x: auto;
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: var(--radius);
     background: #fffdf8;
+    box-shadow: var(--shadow-soft);
 }
 
 table {
@@ -13,23 +14,23 @@ table {
 
 th,
 td {
-    padding: 15px 16px;
-    text-align: left;
+    padding: 13px 14px;
+    text-align: right;
     border-bottom: 1px solid #eadfce;
-    font-size: 1rem;
+    font-size: 0.95rem;
     vertical-align: top;
 }
 
 th {
     background: var(--surface-2);
     color: #4e3f2e;
-    font-size: 0.94rem;
+    font-size: 0.82rem;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
 }
 
 tr:hover td {
-    background: #fff8ee;
+    background: #fff7ec;
 }
 
 .summary-table {

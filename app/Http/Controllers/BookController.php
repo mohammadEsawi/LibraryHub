@@ -8,16 +8,30 @@ use App\Models\Author;
 use App\Models\Category;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
     public function index()
     {
         $type = request()->string('type', 'all')->toString();
+        $q = trim(request()->string('q')->toString());
         
         $query = Book::with(['author', 'category', 'listedBy'])
                      ->where('available', true)
                      ->latest();
+
+        if ($q !== '') {
+            $query->where(function ($subQuery) use ($q) {
+                $subQuery->where('title', 'like', "%{$q}%")
+                    ->orWhereHas('author', function ($authorQuery) use ($q) {
+                        $authorQuery->where('name', 'like', "%{$q}%");
+                    })
+                    ->orWhereHas('category', function ($categoryQuery) use ($q) {
+                        $categoryQuery->where('name', 'like', "%{$q}%");
+                    });
+            });
+        }
         
         if ($type === 'premium') {
             $query->where('price', '>', 0);
@@ -25,22 +39,29 @@ class BookController extends Controller
             $query->where('price', 0);
         }
         
-        $books = $query->paginate(12);
+        $books = $query->paginate(12)->withQueryString();
 
-        return view('books.index', compact('books', 'type'));
+        return view('books.index', compact('books', 'type', 'q'));
     }
 
     public function create()
     {
-        $authors    = Author::orderBy('name')->get();
         $categories = Category::orderBy('name')->get();
 
-        return view('books.create', compact('authors', 'categories'));
+        return view('books.create', compact('categories'));
     }
 
     public function store(StoreBookRequest $request)
     {
         $validated = $request->validated();
+        $author = Author::firstOrCreate(['name' => trim($validated['author_name'])]);
+
+        if ($request->hasFile('cover_image')) {
+            $validated['cover_image'] = $request->file('cover_image')->store('book-covers', 'public');
+        }
+
+        $validated['author_id'] = $author->id;
+        unset($validated['author_name']);
         $validated['available'] = $request->boolean('available');
         $validated['published'] = true;
         $validated['listed_by_user_id'] = $request->user()?->id;
@@ -74,17 +95,28 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
-        $authors    = Author::orderBy('name')->get();
         $categories = Category::orderBy('name')->get();
 
-        return view('books.edit', compact('book', 'authors', 'categories'));
+        return view('books.edit', compact('book', 'categories'));
     }
 
     public function update(UpdateBookRequest $request, Book $book)
     {
-        $before = $book->only(['title', 'price', 'available', 'published_year', 'pages']);
+        $before = $book->only(['title', 'price', 'available', 'published_year', 'pages', 'cover_image']);
 
         $validated = $request->validated();
+        $author = Author::firstOrCreate(['name' => trim($validated['author_name'])]);
+
+        if ($request->hasFile('cover_image')) {
+            if ($book->cover_image) {
+                Storage::disk('public')->delete($book->cover_image);
+            }
+
+            $validated['cover_image'] = $request->file('cover_image')->store('book-covers', 'public');
+        }
+
+        $validated['author_id'] = $author->id;
+        unset($validated['author_name']);
         $validated['available'] = $request->boolean('available');
         $validated['published'] = true;
 
@@ -99,7 +131,7 @@ class BookController extends Controller
             'description' => 'تم تحديث بيانات كتاب داخل المنصة.',
             'meta' => [
                 'before' => $before,
-                'after' => $book->fresh()->only(['title', 'price', 'available', 'published_year', 'pages']),
+                'after' => $book->fresh()->only(['title', 'price', 'available', 'published_year', 'pages', 'cover_image']),
             ],
         ]);
 
@@ -109,7 +141,11 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
-        $snapshot = $book->only(['title', 'price', 'available', 'published_year', 'pages']);
+        $snapshot = $book->only(['title', 'price', 'available', 'published_year', 'pages', 'cover_image']);
+
+        if ($book->cover_image) {
+            Storage::disk('public')->delete($book->cover_image);
+        }
 
         $book->delete();
 
